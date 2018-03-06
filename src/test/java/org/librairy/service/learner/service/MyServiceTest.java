@@ -1,8 +1,10 @@
-package org.librairy.service.ner.service;
+package org.librairy.service.learner.service;
 
+import org.assertj.core.util.Strings;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.librairy.service.learner.service.MyService;
+import org.librairy.service.learner.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ import java.util.HashMap;
  * @author Badenes Olmedo, Carlos <cbadenes@fi.upm.es>
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = MyService.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class MyServiceTest {
 
@@ -27,13 +29,13 @@ public class MyServiceTest {
     MyService service;
 
     @Test
-    public void annotation() throws IOException {
+    public void train() throws IOException {
 
 
-        String result = service.train("src/test/resources/corpus.csv", new HashMap<>(), new HashMap<>());
+        String result = service.train(new HashMap<>());
 
         LOG.info("Result: " + result);
 
-//        Assert.assertEquals(2, annotations.size());
+        Assert.assertFalse(Strings.isNullOrEmpty(result));
     }
 }

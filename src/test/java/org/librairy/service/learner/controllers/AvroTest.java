@@ -1,11 +1,11 @@
-package org.librairy.service.ner.controllers;
+package org.librairy.service.learner.controllers;
 
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.librairy.service.learner.controllers.AvroController;
+import org.librairy.service.learner.Application;
 import org.librairy.service.learner.facade.AvroClient;
-import org.librairy.service.learner.service.MyService;
+import org.librairy.service.learner.facade.model.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {AvroController.class,MyService.class})
+@SpringBootTest(classes = {Application.class})
 @WebAppConfiguration
 public class AvroTest {
 
@@ -33,7 +33,15 @@ public class AvroTest {
 
         client.open(host,port);
 
-        client.train("local.cvs", new HashMap<>(), new HashMap<>());
+        client.addDocument(Document.newBuilder().setId("doc1").setText("sample text").build());
+        client.reset();
+
+        client.getTopics();
+        client.getWords(1,10);
+
+        client.train(new HashMap<>());
+
+        client.inference("sample text");
 
         client.close();
     }

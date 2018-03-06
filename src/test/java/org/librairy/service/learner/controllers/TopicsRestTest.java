@@ -1,4 +1,4 @@
-package org.librairy.service.ner.controllers;
+package org.librairy.service.learner.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mashape.unirest.http.HttpResponse;
@@ -6,15 +6,18 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.ObjectMapper;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.assertj.core.util.Strings;
+import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.librairy.service.learner.Application;
 import org.librairy.service.learner.facade.rest.model.TrainRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -24,9 +27,12 @@ import java.util.HashMap;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-public class RestTest {
+public class TopicsRestTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RestTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TopicsRestTest.class);
+
+    @Autowired
+    RestTopicsController service;
 
     @Before
     public void setup(){
@@ -53,18 +59,13 @@ public class RestTest {
     }
 
     @Test
-    @Ignore
-    public void post() throws UnirestException {
+    public void postTopics() throws UnirestException {
 
-        TrainRequest req = new TrainRequest("src/test/resources/corpus.csv",new HashMap<>(), new HashMap<>());
+        TrainRequest req = new TrainRequest(new HashMap());
 
-        HttpResponse<JsonNode> response = Unirest.post("http://localhost:7777/train")
-                .header("accept", "application/json")
-                .header("Content-Type", "application/json")
-                .body(req)
-                .asJson();
+        ResponseEntity<String> result = service.train(req);
 
-        LOG.info("Response: " + response.getBody());
+        Assert.assertFalse(Strings.isNullOrEmpty(result.getBody()));
 
 
     }

@@ -1,7 +1,7 @@
 package org.librairy.service.learner.service;
 
 import org.apache.avro.AvroRemoteException;
-import org.librairy.service.learner.facade.model.LearnerService;
+import org.librairy.service.learner.facade.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -32,13 +34,37 @@ public class MyService implements LearnerService {
 
 
     @Override
-    public String train(String s, Map<String, String> map, Map<String, String> map1) throws AvroRemoteException {
-
-        LOG.debug("ready to train a new model from corpus: " + s);
-
+    public String addDocument(Document document) throws AvroRemoteException {
         //TODO
+        return "document added";
+    }
 
-        String modelDescription = "";
-        return modelDescription;
+    @Override
+    public String reset() throws AvroRemoteException {
+        //TODO
+        return "documents deleted";
+    }
+
+    @Override
+    public List<Topic> getTopics() throws AvroRemoteException {
+        //TODO
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<Word> getWords(int i, int i1) throws AvroRemoteException {
+        //TODO
+        return Collections.emptyList();
+    }
+
+    @Override
+    public String train(Map<String, String> map) throws AvroRemoteException {
+        //TODO
+        return "building a new model";
+    }
+
+    @Override
+    public List<TopicDistribution> inference(String s) throws AvroRemoteException {
+        return Collections.emptyList();
     }
 }

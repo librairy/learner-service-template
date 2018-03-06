@@ -1,6 +1,4 @@
-package org.librairy.service.ner;
-
-import org.librairy.service.learner.Application;
+package org.librairy.service.learner;
 
 /**
  * @author Badenes Olmedo, Carlos <cbadenes@fi.upm.es>
