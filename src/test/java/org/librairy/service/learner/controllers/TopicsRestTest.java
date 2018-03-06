@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.librairy.service.learner.Application;
-import org.librairy.service.learner.facade.rest.model.TrainRequest;
+import org.librairy.service.learner.facade.rest.model.ModelParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ public class TopicsRestTest {
     @Test
     public void postTopics() throws UnirestException {
 
-        TrainRequest req = new TrainRequest(new HashMap());
+        ModelParameters req = new ModelParameters(new HashMap());
 
         ResponseEntity<String> result = service.train(req);
 
