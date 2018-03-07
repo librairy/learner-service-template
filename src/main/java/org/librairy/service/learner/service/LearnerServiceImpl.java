@@ -1,6 +1,7 @@
 package org.librairy.service.learner.service;
 
 import org.apache.avro.AvroRemoteException;
+import org.librairy.service.learner.facade.model.Corpus;
 import org.librairy.service.learner.facade.model.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,11 @@ public class LearnerServiceImpl implements org.librairy.service.learner.facade.m
     public String train(Map<String, String> map) throws AvroRemoteException {
         //TODO
         return "building a new model";
+    }
+
+    @Override
+    public Corpus getCorpus() throws AvroRemoteException {
+        return Corpus.newBuilder().setSize(0).setUpdated("2018").build();
     }
 
 }

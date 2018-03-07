@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.apache.avro.AvroRemoteException;
 import org.librairy.service.learner.facade.model.LearnerService;
+import org.librairy.service.learner.facade.rest.model.Corpus;
 import org.librairy.service.learner.facade.rest.model.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +67,23 @@ public class RestDocumentsController {
         try {
             String result = service.reset();
             return new ResponseEntity(result, HttpStatus.ACCEPTED);
+        } catch (AvroRemoteException e) {
+            return new ResponseEntity("internal service seems down",HttpStatus.FAILED_DEPENDENCY);
+        } catch (Exception e) {
+            LOG.error("IO Error", e);
+            return new ResponseEntity("IO error",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @ApiOperation(value = "corpus statistics", nickname = "getDocuments", response=Corpus.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = Corpus.class),
+    })
+    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<Corpus> getCorpus()  {
+        try {
+            return new ResponseEntity(service.getCorpus(), HttpStatus.ACCEPTED);
         } catch (AvroRemoteException e) {
             return new ResponseEntity("internal service seems down",HttpStatus.FAILED_DEPENDENCY);
         } catch (Exception e) {
