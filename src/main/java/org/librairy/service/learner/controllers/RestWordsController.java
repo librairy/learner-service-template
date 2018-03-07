@@ -5,8 +5,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.apache.avro.AvroRemoteException;
-import org.librairy.service.learner.facade.model.LearnerService;
-import org.librairy.service.learner.facade.rest.model.WordList;
+import org.librairy.service.modeler.facade.model.ModelerService;
+import org.librairy.service.modeler.facade.rest.model.Word;
+import org.librairy.service.modeler.facade.rest.model.WordList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class RestWordsController {
     private static final Logger LOG = LoggerFactory.getLogger(RestWordsController.class);
 
     @Autowired
-    LearnerService service;
+    ModelerService service;
 
     @PostConstruct
     public void setup(){
@@ -48,7 +49,7 @@ public class RestWordsController {
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<WordList> words(@RequestParam Integer topicId, @RequestParam Integer maxWords)  {
         try {
-            return new ResponseEntity(new WordList(service.getWords(topicId,maxWords).stream().map(w -> new org.librairy.service.learner.facade.rest.model.Word(w)).collect(Collectors.toList())), HttpStatus.OK);
+            return new ResponseEntity(new WordList(service.words(topicId,maxWords).stream().map(w -> new Word(w)).collect(Collectors.toList())), HttpStatus.OK);
         } catch (AvroRemoteException e) {
             return new ResponseEntity("internal service seems down",HttpStatus.FAILED_DEPENDENCY);
         } catch (Exception e) {

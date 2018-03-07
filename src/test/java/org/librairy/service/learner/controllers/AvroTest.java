@@ -36,12 +36,7 @@ public class AvroTest {
         client.addDocument(Document.newBuilder().setId("doc1").setText("sample text").build());
         client.reset();
 
-        client.getTopics();
-        client.getWords(1,10);
-
         client.train(new HashMap<>());
-
-        client.inference("sample text");
 
         client.close();
     }

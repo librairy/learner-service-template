@@ -26,7 +26,7 @@ public class MyServiceTest {
     private static final Logger LOG = LoggerFactory.getLogger(MyServiceTest.class);
 
     @Autowired
-    MyService service;
+    LearnerServiceImpl service;
 
     @Test
     public void train() throws IOException {

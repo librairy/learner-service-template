@@ -5,9 +5,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.apache.avro.AvroRemoteException;
-import org.librairy.service.learner.facade.model.LearnerService;
-import org.librairy.service.learner.facade.rest.model.InferenceRequest;
-import org.librairy.service.learner.facade.rest.model.InferenceResult;
+import org.librairy.service.modeler.facade.model.ModelerService;
+import org.librairy.service.modeler.facade.rest.model.Inference;
+import org.librairy.service.modeler.facade.rest.model.InferenceRequest;
+import org.librairy.service.modeler.facade.rest.model.TopicDistribution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class RestInferenceController {
     private static final Logger LOG = LoggerFactory.getLogger(RestInferenceController.class);
 
     @Autowired
-    LearnerService service;
+    ModelerService service;
 
     @PostConstruct
     public void setup(){
@@ -40,14 +41,14 @@ public class RestInferenceController {
 
     }
 
-    @ApiOperation(value = "topic distributions of a text", nickname = "postInference", response=InferenceResult.class)
+    @ApiOperation(value = "topic distributions of a text", nickname = "postInference", response=Inference.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = InferenceResult.class),
+            @ApiResponse(code = 200, message = "Success", response = Inference.class),
     })
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
-    public InferenceResult inference(@RequestBody InferenceRequest request)  {
+    public Inference inference(@RequestBody InferenceRequest request)  {
         try {
-            return new InferenceResult(service.inference(request.getText()).stream().map(td -> new org.librairy.service.learner.facade.rest.model.TopicDistribution(td)).collect(Collectors.toList()));
+            return new Inference(service.inference(request.getText()).stream().map(td -> new TopicDistribution(td)).collect(Collectors.toList()));
         } catch (AvroRemoteException e) {
             throw new RuntimeException(e);
         }

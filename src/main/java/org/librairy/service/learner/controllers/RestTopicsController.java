@@ -6,9 +6,10 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.apache.avro.AvroRemoteException;
 import org.librairy.service.learner.facade.model.LearnerService;
-import org.librairy.service.learner.facade.model.Topic;
 import org.librairy.service.learner.facade.rest.model.ModelParameters;
-import org.librairy.service.learner.facade.rest.model.TopicList;
+import org.librairy.service.modeler.facade.model.ModelerService;
+import org.librairy.service.modeler.facade.rest.model.Topic;
+import org.librairy.service.modeler.facade.rest.model.TopicList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -32,7 +32,10 @@ public class RestTopicsController {
     private static final Logger LOG = LoggerFactory.getLogger(RestTopicsController.class);
 
     @Autowired
-    LearnerService service;
+    ModelerService modelerService;
+
+    @Autowired
+    LearnerService learnerService;
 
     @PostConstruct
     public void setup(){
@@ -51,8 +54,7 @@ public class RestTopicsController {
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<TopicList> get()  {
         try {
-            List<Topic> result = service.getTopics();
-            return new ResponseEntity(new TopicList(result.stream().map(t -> new org.librairy.service.learner.facade.rest.model.Topic(t)).collect(Collectors.toList())), HttpStatus.OK);
+            return new ResponseEntity(new TopicList(modelerService.topics().stream().map(t -> new Topic(t)).collect(Collectors.toList())), HttpStatus.OK);
         } catch (AvroRemoteException e) {
             return new ResponseEntity("internal service seems down",HttpStatus.FAILED_DEPENDENCY);
         } catch (Exception e) {
@@ -69,8 +71,7 @@ public class RestTopicsController {
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<String> train(@RequestBody ModelParameters request)  {
         try {
-            String result = service.train(request.getParameters());
-            return new ResponseEntity(result, HttpStatus.ACCEPTED);
+            return new ResponseEntity(learnerService.train(request.getParameters()), HttpStatus.ACCEPTED);
         } catch (AvroRemoteException e) {
             return new ResponseEntity("internal service seems down",HttpStatus.FAILED_DEPENDENCY);
         } catch (Exception e) {
